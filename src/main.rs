@@ -1,5 +1,6 @@
 extern crate libc;
 use libc::{c_void, c_char, c_int, RTLD_LAZY};
+use std::process::Command;
 use std::ffi::CString;
 
 extern "C" {
@@ -9,6 +10,14 @@ extern "C" {
 }
 
 fn main() {
+    let _output = Command::new("clang")
+        .arg("./cfile/libsample.c")
+        .arg("--shared")
+        .arg("-o")
+        .arg("./cfile/libsample.so")
+        .output()
+        .unwrap();
+
     let filename = CString::new("./cfile/libsample.so").unwrap();
     let funcname = CString::new("foo").unwrap();
     unsafe {
